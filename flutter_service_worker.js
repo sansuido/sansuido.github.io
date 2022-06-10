@@ -377,22 +377,22 @@ const RESOURCES = {
 "assets/assets/Log.txt": "d8b32aae33b1bd3663c7214875c74127",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
-"assets/NOTICES": "50596e91b4c127f063249a4e8e6ed3f9",
+"assets/NOTICES": "47a0b7f150aa277f0716aa639b0b2eec",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
-"assets/shaders/ink_sparkle.frag": "766c8cc582887d79fd06bb0d7caf09e0",
+"assets/shaders/ink_sparkle.frag": "c94b92fd65fba94f95b0209861ac652b",
 "canvaskit/canvaskit.js": "c2b4e5f3d7a3d82aed024e7249a78487",
 "canvaskit/canvaskit.wasm": "4b83d89d9fecbea8ca46f2f760c5a9ba",
 "canvaskit/profiling/canvaskit.js": "ae2949af4efc61d28a4a80fffa1db900",
 "canvaskit/profiling/canvaskit.wasm": "95e736ab31147d1b2c7b25f11d4c32cd",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"flutter.js": "0816e65a103ba8ba51b174eeeeb2cb67",
+"flutter.js": "eb2682e33f25cd8f1fc59011497c35f8",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "bf38df73903f3907dd551bdbc4224197",
-"/": "bf38df73903f3907dd551bdbc4224197",
-"main.dart.js": "e891d2fe5d36c14d82557a239821a126",
+"index.html": "afd131e955f9c3f42de93f76e32a5918",
+"/": "afd131e955f9c3f42de93f76e32a5918",
+"main.dart.js": "1b2a9e70d35b1079236d0d433fc591b7",
 "manifest.json": "cc837b28487d1b65c3f0e7ce4bd26680",
 "version.json": "57a7318938166e394a6b1b742fbbf082"
 };
@@ -500,9 +500,11 @@ self.addEventListener("fetch", (event) => {
     .then((cache) =>  {
       return cache.match(event.request).then((response) => {
         // Either respond with the cached resource, or perform a fetch and
-        // lazily populate the cache.
+        // lazily populate the cache only if the resource was successfully fetched.
         return response || fetch(event.request).then((response) => {
-          cache.put(event.request, response.clone());
+          if (response && Boolean(response.ok)) {
+            cache.put(event.request, response.clone());
+          }
           return response;
         });
       })
